@@ -16,11 +16,22 @@ export default defineConfig(({ mode }: ConfigEnv) => {
   return {
     resolve: {
       alias: {
-        '/@': resolve(__dirname, 'src'),
+        '@': resolve(__dirname, './src'),
+        utils: resolve(__dirname, './src/utils'),
+        api: resolve(__dirname, './src/api'),
       },
       extensions: ['.js', '.json', '.ts', '.vue'], // 使用路径别名时想要省略的后缀名，可以自己 增减
     },
-
+    css: {
+      // css预处理器
+      preprocessorOptions: {
+        scss: {
+          // 引入 mixin.scss 这样就可以在全局中使用 mixin.scss中预定义的变量了
+          // 给导入的路径最后加上 ;
+          additionalData: '@import "@/assets/style/mixin.scss";'
+        }
+      }
+    },
     /* more config */
     plugins: [
       vue({
