@@ -2,8 +2,8 @@ import type { RouteRecordRaw } from 'vue-router'
 
 // 获取modules中的路由规则
 // https://cn.vitejs.dev/guide/features.html#glob-import
-const modules = import.meta.globEager('./modules/**/*.ts')
-
+// const modules = import.meta.globEager('./modules/**/*.ts')
+const modules = import.meta.globEager('./modules.ts')
 // modules routes
 const routes: RouteRecordRaw[] = []
 
@@ -35,5 +35,4 @@ const notFoundPage: RouteRecordRaw = {
   name: '404',
   component: () => import('@/views/common/404Page/index.vue')
 }
-
 export default [rootRoute, ...routes, notFoundPage]

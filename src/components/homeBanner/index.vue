@@ -1,7 +1,16 @@
 <script setup lang="ts">;
 import { NCarousel } from 'naive-ui';
 import { ref, nextTick } from "vue";
-import { TabsType } from '../../const/enum';
+import { TabsType } from '@/const/enum';
+
+const props = defineProps<{
+    activeName: string;
+    // activeName: TabsType;
+    routerList: any[];
+}>();
+const emit = defineEmits<{
+  (event: "clickToPage", tabIndex: string): void;
+}>();
 
 const bannerList = ref([
     { id: 1, tip: 'ENIRONMENTAL CONTROL', title1: '科技春秋', title2: '万法自然', content: '用科技为生物实验提供贴近自然的最优方案', img: '/src/assets/image/home_banner1.jpg'},
@@ -15,17 +24,17 @@ const tabsList = ref([
     { id: 14, type: 5, title: '新闻资讯' },
     { id: 15, type: 6, title: '联系我们' }
 ])
-const activeName = ref<TabsType>(TabsType.HOME)
+// const activeName = ref<TabsType>(TabsType.HOME)
 
 const handleTabsClick = ({ paneName }: any) => {
    nextTick(() => {
-    console.log(paneName,111,  activeName.value)
+    emit('clickToPage', paneName)
    })
 }
 </script>
 <template>
     <div class="banner-wrap">
-        <n-carousel autoplay show-arrow draggable v-if="activeName === TabsType.HOME">
+        <n-carousel autoplay show-arrow draggable v-if="props.activeName === '/home'">
             <div class="banner-wrap-item"
                 v-for="item in bannerList"
                 :key="item.id"
@@ -40,27 +49,30 @@ const handleTabsClick = ({ paneName }: any) => {
                 </div>
             </div>
         </n-carousel>
-
+        <div class="other-top-wrap" v-else>
+            <img src="/src/assets/image/admin/top.jpg" alt="">
+        </div>
         <div class="tab-wrap">
             <el-tabs v-model="activeName" class="demo-tabs" @tab-click="handleTabsClick">
                 <el-tab-pane
-                    v-for="item in tabsList"
-                    :key="item.id"
-                    :label="item.title"
-                    :name="item.type"
-                ></el-tab-pane>
+                    v-for="item in routerList"
+                    :key="item.name"
+                    :name="item.path"
+                >
+                    <template #label>
+                       <router-link :to="item.path"> {{ item.meta.title }}</router-link>
+                    </template>
+                </el-tab-pane>
             </el-tabs>
         </div>
     </div>
 </template>
 <style scoped lang="scss">
 .banner-wrap {
-    height: 100vh;
     .banner-wrap-item {
         background-repeat: no-repeat;
-        background-size: 100vw 100vh;
+        background-size: 100vw 100%;
         width: 100%;
-        height: 100vh;
         padding-top: 100px;
         display: flex;
         align-items: center;
@@ -118,12 +130,19 @@ const handleTabsClick = ({ paneName }: any) => {
             .el-tabs__nav-wrap::after {
                 display: none !important;
             }
-            .is-active, .el-tabs__active-bar {
+            .is-active >a, .el-tabs__active-bar >a {
                 color:#4cb050 !important;
             }
             .el-tabs__active-bar {
                 background-color:#4cb050 !important;
             }
+        }
+    }
+
+    .other-top-wrap {
+        width: 100vw;
+        img {
+            width: 100%;
         }
     }
 }

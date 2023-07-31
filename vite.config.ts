@@ -42,7 +42,7 @@ export default defineConfig(({ mode }: ConfigEnv) => {
         // 自定引入 Vue VueRouter API,如果还需要其他的可以自行引入
         imports: ['vue', 'vue-router'],
         // 调整自动引入的文件位置
-        dts: 'src/type/auto-import.d.ts',
+        dts: 'src/types/auto-import.d.ts',
         // 解决自动引入eslint报错问题 需要在eslintrc的extend选项中引入
         eslintrc: {
           enabled: true,
@@ -56,7 +56,7 @@ export default defineConfig(({ mode }: ConfigEnv) => {
           // 需要自动导入的组件
           NaiveUiResolver(),
         ],
-        dts: 'src/type/components.d.ts',
+        dts: 'src/types/components.d.ts',
       }),
     ],
   }
